@@ -4775,7 +4775,7 @@ static inline Vec8i lookup(Vec8i const index, void const * table) {
 }
 
 static inline Vec4q lookup4(Vec4q const index, Vec4q const table) {
-    return Vec4q(lookup8(Vec8i(index * 0x200000002ll + 0x100000000ll), Vec8i(table)));
+    return Vec4q(lookup8(Vec8i(index * Vec4q(0x200000002ll) + Vec4q(0x100000000ll)), Vec8i(table)));
 }
 
 template <int n>
