@@ -4708,7 +4708,7 @@ static inline Vec32c lookup(Vec32c const index, void const * table) {
 
 
 static inline Vec16s lookup16(Vec16s const index, Vec16s const table) {
-    return Vec16s(lookup32(Vec32c(index * 0x202 + 0x100), Vec32c(table)));
+    return Vec16s(lookup32(Vec32c(index * Vec16s(0x202) + Vec16s(0x100)), Vec32c(table)));
 }
 
 template <int n>

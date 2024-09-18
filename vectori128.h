@@ -5569,7 +5569,7 @@ static inline Vec16c lookup(Vec16c const index, void const * table) {
 
 static inline Vec8s lookup8(Vec8s const index, Vec8s const table) {
 #if INSTRSET >= 5  // SSSE3
-    return _mm_shuffle_epi8(table, index * 0x202 + 0x100);
+    return _mm_shuffle_epi8(table, index * Vec8s(0x202) + 0x100);
 #else
     int16_t ii[8], tt[8], rr[8];
     table.store(tt);  index.store(ii);
@@ -5582,8 +5582,8 @@ static inline Vec8s lookup16(Vec8s const index, Vec8s const table0, Vec8s const 
 #ifdef __XOP__  // AMD XOP instruction set. Use VPPERM
     return (Vec8s)_mm_perm_epi8(table0, table1, index * 0x202 + 0x100);
 #elif INSTRSET >= 5  // SSSE3
-    Vec8s r0 = _mm_shuffle_epi8(table0, Vec16c(index * 0x202) + Vec16c(Vec8s(0x7170)));
-    Vec8s r1 = _mm_shuffle_epi8(table1, Vec16c(index * 0x202 ^ 0x1010) + Vec16c(Vec8s(0x7170)));
+    Vec8s r0 = _mm_shuffle_epi8(table0, Vec16c(index * Vec8s(0x202)) + Vec16c(Vec8s(0x7170)));
+    Vec8s r1 = _mm_shuffle_epi8(table1, Vec16c(index * Vec8s(0x202) ^ Vec8s(0x1010)) + Vec16c(Vec8s(0x7170)));
     return r0 | r1;
 #else
     int16_t ii[16], tt[32], rr[16];
@@ -5625,7 +5625,7 @@ static inline Vec8s lookup(Vec8s const index, void const * table) {
 
 static inline Vec4i lookup4(Vec4i const index, Vec4i const table) {
 #if INSTRSET >= 5  // SSSE3
-    return _mm_shuffle_epi8(table, index * 0x04040404 + 0x03020100);
+    return _mm_shuffle_epi8(table, index * Vec4i(0x04040404) + Vec4i(0x03020100));
 #else
     return Vec4i(table[index[0]], table[index[1]], table[index[2]], table[index[3]]);
 #endif
@@ -5634,7 +5634,7 @@ static inline Vec4i lookup4(Vec4i const index, Vec4i const table) {
 static inline Vec4i lookup8(Vec4i const index, Vec4i const table0, Vec4i const table1) {
     // return Vec4i(lookup16(Vec8s(index * 0x20002 + 0x10000), Vec8s(table0), Vec8s(table1)));
 #ifdef __XOP__  // AMD XOP instruction set. Use VPPERM
-    return (Vec4i)_mm_perm_epi8(table0, table1, index * 0x04040404 + 0x03020100);
+    return (Vec4i)_mm_perm_epi8(table0, table1, index * Vec4i(0x04040404) + Vec4i(0x03020100));
 #elif INSTRSET >= 8 // AVX2. Use VPERMD
     __m256i table01 = _mm256_inserti128_si256(_mm256_castsi128_si256(table0), table1, 1); // join tables into 256 bit vector
     return _mm256_castsi256_si128(_mm256_permutevar8x32_epi32(table01, _mm256_castsi128_si256(index)));
@@ -5711,7 +5711,7 @@ static inline Vec4i lookup(Vec4i const index, void const * table) {
 
 static inline Vec2q lookup2(Vec2q const index, Vec2q const table) {
 #if INSTRSET >= 5  // SSSE3
-    return _mm_shuffle_epi8(table, index * 0x0808080808080808ll + 0x0706050403020100ll);
+    return _mm_shuffle_epi8(table, index * Vec2q(0x0808080808080808ll) + Vec2q(0x0706050403020100ll));
 #else
     int64_t ii[2], tt[2];
     table.store(tt);  index.store(ii);
